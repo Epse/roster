@@ -18,17 +18,21 @@ impl Default for Tabs {
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct RosterApp {
+    // TODO serde skip appropriate fields?
     tab: Tabs,
-    blocks: usize,
-    stations: usize,
+    blocks: Vec<String>,
+    stations: Vec<String>,
+    controllers: Vec<String>,
+    // TODO store data, with controller indices maybe?
 }
 
 impl Default for RosterApp {
     fn default() -> Self {
         Self {
             tab: Tabs::default(),
-            blocks: 4,
-            stations: 8,
+            blocks: vec![],
+            stations: vec![],
+            controllers: vec![String::from("")],
         }
     }
 }
@@ -64,6 +68,10 @@ impl eframe::App for RosterApp {
 
             egui::menu::bar(ui, |ui| {
                 ui.menu_button("File", |ui| {
+                    if ui.button("New").clicked() {
+                        *self = RosterApp::default();
+                        ui.close_menu();
+                    }
                     if ui.button("Quit").clicked() {
                         ctx.send_viewport_cmd(egui::ViewportCommand::Close);
                     }
