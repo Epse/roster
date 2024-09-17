@@ -41,3 +41,8 @@ impl<'a> egui::Widget for DropdownGrid<'a> {
         response.response
     }
 }
+
+pub fn enter_pressed(response: egui::Response) -> bool {
+    response.lost_focus()
+        && response.ctx.input(|i| i.key_pressed(egui::Key::Enter))
+}
